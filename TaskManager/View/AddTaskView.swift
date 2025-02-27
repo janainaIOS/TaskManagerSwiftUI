@@ -6,15 +6,19 @@
 //
 
 import SwiftUI
+import SimpleToast
 
 struct AddTaskView: View {
     
+    @StateObject private var coreDataManager = CoreDataManager.shared
     @Environment(\.dismiss) var dismiss
     @State var isForEdit = false
     @State var task: Task
     @State private var showDatePicker = false
     @State private var selectedDate = Date()
-    @State private var addTaskTapped = false
+    @State private var showToast = false
+    @State private var toastMessage : String = ""
+    
     @Namespace private var animation
     
     var body: some View {
@@ -29,7 +33,7 @@ struct AddTaskView: View {
                         } label: {
                             Image(systemName: "arrow.left")
                                 .font(.title3)
-                                .foregroundColor(.black)
+                                .foregroundColor(.primary)
                         }
                     }
                     .padding(.bottom, 30)
@@ -50,10 +54,15 @@ struct AddTaskView: View {
                     Text("Description")
                         .font(.footnote)
                         .foregroundColor(.gray)
-                    TextEditor(text: $task.descriptn)
-                        .frame(height: 100)
-                        .background(Color.gray.opacity(0.2))
-                      //  .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
+                    ZStack {
+                        Color(UIColor { $0.userInterfaceStyle == .dark ? .white : .gray }).opacity(0.05) // Background color
+                            .cornerRadius(8)
+                        TextEditor(text: $task.descriptn)
+                            .frame(height: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/)
+                            .scrollContentBackground(.hidden)
+                            .background(Color.clear)
+                            .padding(8)
+                    }
                 }
                 Divider()
                     .padding(.vertical, 10)
@@ -72,10 +81,11 @@ struct AddTaskView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .overlay(alignment: .bottomLeading) {
                     Button {
+                        hideKeyboard()
                         showDatePicker.toggle()
                     } label: {
                         Image(systemName: "calendar")
-                            .foregroundColor(.black)
+                            .foregroundColor(.primary)
                     }
                 }
                 
@@ -91,59 +101,68 @@ struct AddTaskView: View {
                 }
                 
                 Button(action: {
-                    addTaskTapped = true
+                    addTaskAction()
                 }, label: {
-                    Text("Add Task")
+                    Text(isForEdit ? "Save" : "Add Task")
                         .font(.subheadline)
                         .frame(width: geometry.size.width * 0.85, height: 40)
                         .foregroundColor(.white)
                 })
-                .tint(.accent)
+                .tint(.accentColor)
                 .buttonStyle(.borderedProminent)
                 .padding(.vertical, 33)
+                Spacer()
             }
-            .padding()
-            .overlay {
-                ZStack {
-                    if showDatePicker {
-                        // Full-screen transparent tap area with blur effect
-                        Color.clear
-                            .background(.ultraThinMaterial)
-                            .ignoresSafeArea()
-                            .onTapGesture {
+            
+        }
+        .showToast(isPresented: $showToast, message: toastMessage)
+        .padding()
+        .navigationBarBackButtonHidden()
+        .overlay {
+            ZStack {
+                if showDatePicker {
+                    
+                    // Full-screen transparent tap area
+                    Color.black.opacity(showDatePicker ? 0.8 : 0)
+                        .edgesIgnoringSafeArea(.all)
+                        .onTapGesture {
+                            withAnimation {
                                 showDatePicker = false
                             }
-                        
-                        // DatePicker
-                        VStack {
-                            DatePicker("",
-                                       selection: $selectedDate,
-                                       in: Date.now...,
-                                       displayedComponents: .date)
-                            .datePickerStyle(.graphical)
-                            .accentColor(.accent)
-                            .labelsHidden()
-                            .padding()
-                            .background(RoundedRectangle(cornerRadius: 20).fill(Color.white).shadow(radius: 5))
-                            .padding()
-                            
-                            Button("Done") {
-                                showDatePicker = false
-                            }
-                            .padding()
-                            .background(.accent)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
                         }
+                    // DatePicker
+                    VStack {
+                        DatePicker("",
+                                   selection: $selectedDate,
+                                   in: Date.now...,
+                                   displayedComponents: .date)
+                        .datePickerStyle(.graphical)
+                        .accentColor(.accentColor)
+                        .labelsHidden()
+                        .padding()
+                        .background(
+                            RoundedRectangle(cornerRadius: 20)
+                                .fill(Color(UIColor { $0.userInterfaceStyle == .dark ? .black : .white })) // Background color dynamic
+                                .shadow(radius: 5)
+                        )
+                        .padding()
+                        
+                        Button("Done") {
+                            showDatePicker = false
+                        }
+                        .padding()
+                        .background(Color.accentColor)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
                     }
                 }
-                .animation(.easeInOut, value: showDatePicker)
-                
             }
+            .animation(.easeInOut, value: showDatePicker)
         }
+        
     }
     
-    // Extracted Priority Selector
+    // Priority selector view
     var prioritySelector: some View {
         HStack(spacing: 12) {
             ForEach(TaskPriority.allCases, id: \.self) { type in
@@ -165,7 +184,7 @@ struct AddTaskView: View {
         }
     }
     
-    // Extracted Background View
+    // Priority background view
     func priorityBackground(_ isSelected: Bool, color: Color) -> some View {
         Group {
             if isSelected {
@@ -180,6 +199,35 @@ struct AddTaskView: View {
             }
         }
     }
+    
+    //Add Task button Action
+    func addTaskAction() {
+        //title textfield validation
+        if task.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            toastMessage = AlertMessages.titleEmptyAlert
+            showToast = true
+        } else {
+            // format task date
+            task.date = selectedDate.formatDate(outputFormat: .ddMMMyyyy)
+            
+            if isForEdit {
+                //update task in coredata
+                coreDataManager.editTask(task: task) { status in
+                    if status {
+                        self.dismiss()
+                    }
+                }
+            } else {
+                //create new task in coredata
+                coreDataManager.addTask(task: task) { status in
+                    if status {
+                        self.dismiss()
+                    }
+                }
+            }
+        }
+    }
+    
 }
 
 #Preview {

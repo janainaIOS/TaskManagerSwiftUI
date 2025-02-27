@@ -24,9 +24,17 @@
 		A77B6E112D6EF317008A4C2D /* TaskModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77B6E102D6EF317008A4C2D /* TaskModel.swift */; };
 		A77B6E132D6F2BF6008A4C2D /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77B6E122D6F2BF6008A4C2D /* String+Extension.swift */; };
 		A77B6E152D6F2CB3008A4C2D /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77B6E142D6F2CB3008A4C2D /* Date+Extension.swift */; };
+		A7B0F9EB2D701B8500F1BE5A /* SimpleToast in Frameworks */ = {isa = PBXBuildFile; productRef = A7B0F9EA2D701B8500F1BE5A /* SimpleToast */; };
+		A7B0F9EE2D701E1D00F1BE5A /* ToastHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B0F9ED2D701E1D00F1BE5A /* ToastHelper.swift */; };
+		A7B0F9F02D703F5200F1BE5A /* BookmarkBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B0F9EF2D703F5200F1BE5A /* BookmarkBadgeView.swift */; };
 		A7C654D32D6F74D100D7345D /* DBTask+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C654D12D6F74D100D7345D /* DBTask+CoreDataClass.swift */; };
 		A7C654D42D6F74D100D7345D /* DBTask+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C654D22D6F74D100D7345D /* DBTask+CoreDataProperties.swift */; };
-		A7C654D62D6F7AFC00D7345D /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C654D52D6F7AFC00D7345D /* SplashView.swift */; };
+		A7C654D82D6F8D4200D7345D /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C654D72D6F8D4200D7345D /* CoreDataManager.swift */; };
+		A7CEB29F2D7079B900FC49E4 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CEB29E2D7079B900FC49E4 /* View+Extension.swift */; };
+		A7CEB2A12D708F8000FC49E4 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CEB2A02D708F8000FC49E4 /* SettingsView.swift */; };
+		A7CEB2A32D70929700FC49E4 /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CEB2A22D70929700FC49E4 /* UserDefaults+Extension.swift */; };
+		A7CEB2A52D70A38800FC49E4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7CEB2A42D70A38800FC49E4 /* LaunchScreen.storyboard */; };
+		A7CEB2A72D70B37F00FC49E4 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CEB2A62D70B37F00FC49E4 /* CircularProgressView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,9 +75,16 @@
 		A77B6E102D6EF317008A4C2D /* TaskModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskModel.swift; sourceTree = "<group>"; };
 		A77B6E122D6F2BF6008A4C2D /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		A77B6E142D6F2CB3008A4C2D /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
+		A7B0F9ED2D701E1D00F1BE5A /* ToastHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastHelper.swift; sourceTree = "<group>"; };
+		A7B0F9EF2D703F5200F1BE5A /* BookmarkBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkBadgeView.swift; sourceTree = "<group>"; };
 		A7C654D12D6F74D100D7345D /* DBTask+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DBTask+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A7C654D22D6F74D100D7345D /* DBTask+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DBTask+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		A7C654D52D6F7AFC00D7345D /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		A7C654D72D6F8D4200D7345D /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		A7CEB29E2D7079B900FC49E4 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
+		A7CEB2A02D708F8000FC49E4 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A7CEB2A22D70929700FC49E4 /* UserDefaults+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extension.swift"; sourceTree = "<group>"; };
+		A7CEB2A42D70A38800FC49E4 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A7CEB2A62D70B37F00FC49E4 /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7B0F9EB2D701B8500F1BE5A /* SimpleToast in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -160,6 +176,7 @@
 		A77B6DF82D6EE0B5008A4C2D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A7B0F9EC2D701DFE00F1BE5A /* CustomViews */,
 				A77B6E062D6EEABD008A4C2D /* Constants */,
 				A77B6DFE2D6EE10B008A4C2D /* Extensions */,
 				A77B6DFC2D6EE0E3008A4C2D /* Services */,
@@ -178,9 +195,10 @@
 		A77B6DFA2D6EE0C9008A4C2D /* View */ = {
 			isa = PBXGroup;
 			children = (
-				A7C654D52D6F7AFC00D7345D /* SplashView.swift */,
+				A7CEB2A42D70A38800FC49E4 /* LaunchScreen.storyboard */,
 				A77B6E022D6EE3D5008A4C2D /* HomeView.swift */,
 				A77B6E042D6EE420008A4C2D /* AddTaskView.swift */,
+				A7CEB2A02D708F8000FC49E4 /* SettingsView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -196,19 +214,20 @@
 		A77B6DFC2D6EE0E3008A4C2D /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				A77B6DFD2D6EE0EF008A4C2D /* CoreDataManager */,
+				A77B6DFD2D6EE0EF008A4C2D /* CoreData */,
 			);
 			path = Services;
 			sourceTree = "<group>";
 		};
-		A77B6DFD2D6EE0EF008A4C2D /* CoreDataManager */ = {
+		A77B6DFD2D6EE0EF008A4C2D /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
 				A77B6DD22D6EDDC4008A4C2D /* Persistence.swift */,
+				A7C654D72D6F8D4200D7345D /* CoreDataManager.swift */,
 				A77B6DD42D6EDDC4008A4C2D /* TaskManager.xcdatamodeld */,
 				A7C654CC2D6F741900D7345D /* Model */,
 			);
-			path = CoreDataManager;
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 		A77B6DFE2D6EE10B008A4C2D /* Extensions */ = {
@@ -216,6 +235,8 @@
 			children = (
 				A77B6E122D6F2BF6008A4C2D /* String+Extension.swift */,
 				A77B6E142D6F2CB3008A4C2D /* Date+Extension.swift */,
+				A7CEB29E2D7079B900FC49E4 /* View+Extension.swift */,
+				A7CEB2A22D70929700FC49E4 /* UserDefaults+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -227,6 +248,16 @@
 				A77B6E092D6EEADF008A4C2D /* AlertMessages.swift */,
 			);
 			path = Constants;
+			sourceTree = "<group>";
+		};
+		A7B0F9EC2D701DFE00F1BE5A /* CustomViews */ = {
+			isa = PBXGroup;
+			children = (
+				A7B0F9ED2D701E1D00F1BE5A /* ToastHelper.swift */,
+				A7B0F9EF2D703F5200F1BE5A /* BookmarkBadgeView.swift */,
+				A7CEB2A62D70B37F00FC49E4 /* CircularProgressView.swift */,
+			);
+			path = CustomViews;
 			sourceTree = "<group>";
 		};
 		A7C654CC2D6F741900D7345D /* Model */ = {
@@ -254,6 +285,9 @@
 			dependencies = (
 			);
 			name = TaskManager;
+			packageProductDependencies = (
+				A7B0F9EA2D701B8500F1BE5A /* SimpleToast */,
+			);
 			productName = TaskManager;
 			productReference = A77B6DC62D6EDDC3008A4C2D /* TaskManager.app */;
 			productType = "com.apple.product-type.application";
@@ -326,6 +360,9 @@
 				Base,
 			);
 			mainGroup = A77B6DBD2D6EDDC3008A4C2D;
+			packageReferences = (
+				A7B0F9E92D701B8500F1BE5A /* XCRemoteSwiftPackageReference "SimpleToast" */,
+			);
 			productRefGroup = A77B6DC72D6EDDC3008A4C2D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -342,6 +379,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7CEB2A52D70A38800FC49E4 /* LaunchScreen.storyboard in Resources */,
 				A77B6DD12D6EDDC4008A4C2D /* Preview Assets.xcassets in Resources */,
 				A77B6DCE2D6EDDC4008A4C2D /* Assets.xcassets in Resources */,
 			);
@@ -368,20 +406,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7CEB2A12D708F8000FC49E4 /* SettingsView.swift in Sources */,
 				A77B6DD32D6EDDC4008A4C2D /* Persistence.swift in Sources */,
 				A7C654D32D6F74D100D7345D /* DBTask+CoreDataClass.swift in Sources */,
-				A7C654D62D6F7AFC00D7345D /* SplashView.swift in Sources */,
+				A7CEB29F2D7079B900FC49E4 /* View+Extension.swift in Sources */,
 				A77B6DCC2D6EDDC3008A4C2D /* ContentView.swift in Sources */,
 				A77B6E112D6EF317008A4C2D /* TaskModel.swift in Sources */,
 				A7C654D42D6F74D100D7345D /* DBTask+CoreDataProperties.swift in Sources */,
 				A77B6DD62D6EDDC4008A4C2D /* TaskManager.xcdatamodeld in Sources */,
 				A77B6E052D6EE420008A4C2D /* AddTaskView.swift in Sources */,
+				A7B0F9EE2D701E1D00F1BE5A /* ToastHelper.swift in Sources */,
+				A7CEB2A72D70B37F00FC49E4 /* CircularProgressView.swift in Sources */,
 				A77B6E152D6F2CB3008A4C2D /* Date+Extension.swift in Sources */,
 				A77B6E082D6EEACC008A4C2D /* Enum.swift in Sources */,
 				A77B6E032D6EE3D5008A4C2D /* HomeView.swift in Sources */,
+				A7CEB2A32D70929700FC49E4 /* UserDefaults+Extension.swift in Sources */,
+				A7B0F9F02D703F5200F1BE5A /* BookmarkBadgeView.swift in Sources */,
 				A77B6E0A2D6EEADF008A4C2D /* AlertMessages.swift in Sources */,
 				A77B6E0F2D6EF0B8008A4C2D /* TaskViewModel.swift in Sources */,
 				A77B6E132D6F2BF6008A4C2D /* String+Extension.swift in Sources */,
+				A7C654D82D6F8D4200D7345D /* CoreDataManager.swift in Sources */,
 				A77B6DCA2D6EDDC3008A4C2D /* TaskManagerApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -552,7 +596,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = SplashView;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -584,7 +628,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = SplashView;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -718,6 +762,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A7B0F9E92D701B8500F1BE5A /* XCRemoteSwiftPackageReference "SimpleToast" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sanzaru/SimpleToast.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.10.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A7B0F9EA2D701B8500F1BE5A /* SimpleToast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A7B0F9E92D701B8500F1BE5A /* XCRemoteSwiftPackageReference "SimpleToast" */;
+			productName = SimpleToast;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		A77B6DD42D6EDDC4008A4C2D /* TaskManager.xcdatamodeld */ = {

@@ -19,6 +19,15 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             List {
+                VStack {
+                    Image(systemName: "tray")
+                        .font(.largeTitle)
+                        .foregroundColor(.gray)
+                    Text("No Tasks Available")
+                        .font(.title3)
+                        .foregroundColor(.gray)
+                        .padding()
+                }
                 ForEach(items) { item in
                     NavigationLink {
                         Text("Item at \(item.timestamp!, formatter: itemFormatter)")

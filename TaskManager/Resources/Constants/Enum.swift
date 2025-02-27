@@ -31,3 +31,29 @@ enum TaskPriority: String, CaseIterable {
         }
     }
 }
+
+enum ThemeColor: String, CaseIterable {
+    case aqua
+    case green1
+    case plum
+    case lemon
+    case Iron
+    case grape
+    
+    var color : Color {
+        switch self {
+        case .aqua:
+            return .aqua
+        case .green1:
+            return .green1
+        case .plum:
+            return .plum
+        case .lemon:
+            return .lemon
+        case .Iron:
+            return .iron
+        case .grape:
+            return .grape
+        }
+    }
+}
