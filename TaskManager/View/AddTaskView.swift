@@ -8,8 +8,9 @@
 import SwiftUI
 import SimpleToast
 
-struct AddTaskView: View {
+struct AddTaskView: View { 
     
+    @AppStorage("appThemeColor") private var appThemeColor: String = ThemeColor.grape.rawValue
     @StateObject private var coreDataManager = CoreDataManager.shared
     @Environment(\.dismiss) var dismiss
     @State var isForEdit = false
@@ -68,7 +69,7 @@ struct AddTaskView: View {
                     .padding(.vertical, 10)
                 
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("Date")
+                    Text("Due Date")
                         .font(.footnote)
                         .foregroundColor(.gray)
                     
@@ -108,7 +109,7 @@ struct AddTaskView: View {
                         .frame(width: geometry.size.width * 0.85, height: 40)
                         .foregroundColor(.white)
                 })
-                .tint(.accentColor)
+                .tint(ColorManager.currentColor)
                 .buttonStyle(.borderedProminent)
                 .padding(.vertical, 33)
                 Spacer()
@@ -119,47 +120,11 @@ struct AddTaskView: View {
         .padding()
         .navigationBarBackButtonHidden()
         .overlay {
-            ZStack {
-                if showDatePicker {
-                    
-                    // Full-screen transparent tap area
-                    Color.black.opacity(showDatePicker ? 0.8 : 0)
-                        .edgesIgnoringSafeArea(.all)
-                        .onTapGesture {
-                            withAnimation {
-                                showDatePicker = false
-                            }
-                        }
-                    // DatePicker
-                    VStack {
-                        DatePicker("",
-                                   selection: $selectedDate,
-                                   in: Date.now...,
-                                   displayedComponents: .date)
-                        .datePickerStyle(.graphical)
-                        .accentColor(.accentColor)
-                        .labelsHidden()
-                        .padding()
-                        .background(
-                            RoundedRectangle(cornerRadius: 20)
-                                .fill(Color(UIColor { $0.userInterfaceStyle == .dark ? .black : .white })) // Background color dynamic
-                                .shadow(radius: 5)
-                        )
-                        .padding()
-                        
-                        Button("Done") {
-                            showDatePicker = false
-                        }
-                        .padding()
-                        .background(Color.accentColor)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                    }
-                }
-            }
-            .animation(.easeInOut, value: showDatePicker)
+           datePickerView()
         }
-        
+        .onAppear {
+            selectedDate = task.date.formatToDate(inputFormat: .ddMMMyyyy)
+        }
     }
     
     // Priority selector view
@@ -198,6 +163,50 @@ struct AddTaskView: View {
                 
             }
         }
+    }
+    
+    private func datePickerView() -> some View {
+        ZStack {
+            if showDatePicker {
+                
+                // Full-screen transparent tap area
+                Color.black.opacity(showDatePicker ? 0.8 : 0)
+                    .edgesIgnoringSafeArea(.all)
+                    .onTapGesture {
+                        withAnimation {
+                            task.date = selectedDate.formatDate(outputFormat: .ddMMMyyyy)
+                            showDatePicker = false
+                        }
+                    }
+                // DatePicker
+                VStack {
+                    DatePicker("",
+                               selection: $selectedDate,
+                               in: Date.now...,
+                               displayedComponents: .date)
+                    .datePickerStyle(.graphical)
+                    .accentColor(ColorManager.currentColor)
+                    .labelsHidden()
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(Color(UIColor { $0.userInterfaceStyle == .dark ? .black : .white })) // Background color dynamic
+                            .shadow(radius: 5)
+                    )
+                    .padding()
+                    
+                    Button("Done") {
+                        task.date = selectedDate.formatDate(outputFormat: .ddMMMyyyy)
+                        showDatePicker = false
+                    }
+                    .padding()
+                    .background(ColorManager.currentColor)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+                }
+            }
+        }
+        .animation(.easeInOut, value: showDatePicker)
     }
     
     //Add Task button Action

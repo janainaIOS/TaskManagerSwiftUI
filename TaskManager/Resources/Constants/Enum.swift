@@ -8,11 +8,9 @@
 import Foundation
 import SwiftUI
 
-// MARK: - Date and Time
+/// MARK: - Date and Time
 enum dateFormat: String {
-    case yyyyMMddHHmmss       = "yyyy-MM-dd HH:mm:ss" // 2023-04-30 16:00:00
-    case ddMMMyyyy            = "dd MMM yyyy" // 07-February-2025
-    case ddMMyyyy             = "dd/MM/yyyy" // 12/08/2023
+    case ddMMMyyyy            = "dd MMM yyyy" // 07 Feb 2025
 }
 
 enum TaskPriority: String, CaseIterable {
@@ -34,7 +32,7 @@ enum TaskPriority: String, CaseIterable {
 
 enum ThemeColor: String, CaseIterable {
     case aqua
-    case green1
+    case green
     case plum
     case lemon
     case Iron
@@ -44,8 +42,8 @@ enum ThemeColor: String, CaseIterable {
         switch self {
         case .aqua:
             return .aqua
-        case .green1:
-            return .green1
+        case .green:
+            return .green2
         case .plum:
             return .plum
         case .lemon:
@@ -56,4 +54,13 @@ enum ThemeColor: String, CaseIterable {
             return .grape
         }
     }
+}
+
+enum FilterOptions: String, CaseIterable {
+    case all       = "All"
+    case completed = "Completed"
+    case pending   = "Pending"
+    case title    = "Title"
+    case dueDate  = "Due Date"
+    case priority = "Priority"
 }

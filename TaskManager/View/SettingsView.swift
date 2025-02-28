@@ -60,6 +60,7 @@ struct SettingsView: View {
                         .contentShape(Circle())
                         .onTapGesture {
                             appThemeColor = theme.rawValue
+                            ColorManager.appThemeColor = theme.rawValue
                         }
                 }
             }

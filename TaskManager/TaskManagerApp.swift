@@ -20,6 +20,7 @@ struct TaskManagerApp: App {
             }
                 // Set app theme color
                 .accentColor(ThemeColor(rawValue: appThemeColor)?.color ?? .grape)
+                .tint(ThemeColor(rawValue: appThemeColor)?.color ?? .grape)
         }
     }
 }

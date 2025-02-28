@@ -23,4 +23,10 @@ extension String {
             return self
         }
     }
+    
+    func formatToDate(inputFormat: dateFormat) -> Date {
+        let dateFormatterGet = DateFormatter()
+        dateFormatterGet.dateFormat = inputFormat.rawValue
+        return dateFormatterGet.date(from: self) ?? Date()
+    }
 }
