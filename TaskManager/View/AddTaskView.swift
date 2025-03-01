@@ -42,19 +42,22 @@ struct AddTaskView: View {
     }
     
     private var headerView: some View {
-        Text(isForEdit ? "Edit Task" : "New Task")
-            .font(.title3.bold())
-            .frame(maxWidth: .infinity)
-            .overlay(alignment: .leading) {
-                Button {
-                    self.dismiss()
-                } label: {
-                    Image(systemName: "arrow.left")
-                        .font(.title3)
-                        .foregroundColor(.primary)
-                }
+        HStack{
+            Button {
+                self.dismiss()
+            } label: {
+                Image(systemName: "arrow.left")
+                    .font(.title3)
+                    .foregroundColor(.primary)
             }
-            .padding(.bottom, 30)
+            Spacer()
+            Text(isForEdit ? "Edit Task" : "New Task")
+                .font(.title3.bold())
+                .frame(maxWidth: .infinity)
+            Spacer()
+            MenuView(isForEdit: $isForEdit, task: $task)
+        }
+        .padding(.bottom, 30)
     }
     
     private var prorityView: some View {
@@ -74,13 +77,13 @@ struct AddTaskView: View {
             }, label: {
                 Text(isForEdit ? "Save" : "Add Task")
                     .font(.subheadline)
-                    .frame(width: geometry.size.width * 0.92, height: 40)
+                    .frame(maxWidth: .infinity, minHeight: 40)
                     .foregroundColor(.white)
             })
             .accessibilityIdentifier("SaveTaskButton")
             .tint(ColorManager.currentColor)
             .buttonStyle(.borderedProminent)
-            .padding(.vertical, 33)
+            .padding(.vertical, 30)
             Spacer()
         }
     }
@@ -255,6 +258,73 @@ struct DueDateView: View {
         }
         
         Divider() .padding(.vertical, 10)
+    }
+}
+
+struct MenuView: View {
+    @Binding var isForEdit: Bool
+    @Binding var task: Task
+    @StateObject private var coreDataManager = CoreDataManager.shared
+    @Environment(\.dismiss) var dismiss
+    @State private var showAlertView = false
+    @State private var alertMessage : String = ""
+    
+    var body: some View {
+        
+        // Menu appears when tapping more button
+        Menu {
+            if isForEdit && !task.completed {
+                Button("Mark as Complete") {
+                    alertMessage = AlertMessages.completeAlert
+                    showAlertView = true
+                }
+                .foregroundColor(.primary)
+            }
+            Button("Delete Task") {
+                alertMessage = AlertMessages.deleteAlert
+                showAlertView = true
+            }
+            .foregroundColor(.primary)
+        } label: {
+            Image(systemName: "ellipsis")
+                .font(.title)
+                .foregroundColor(.primary)
+                .padding()
+        }
+        .alert(isPresented: $showAlertView) {
+            Alert(
+                title: Text(""),
+                message: Text(alertMessage),
+                primaryButton: .default(Text("Yes"), action: alertActions),
+                secondaryButton: .cancel(Text("No"))
+            )
+        }
+    }
+    
+    func alertActions() {
+        if alertMessage.contains("delete") {
+            deleteAction()
+        } else {
+            markCompleteAction()
+        }
+    }
+    
+    func deleteAction() {
+        coreDataManager.deleteTask(task: task) { status in
+            if status {
+                self.dismiss()
+            }
+        }
+    }
+    
+    func markCompleteAction() {
+        task.completed = true
+        //update task in coredata
+        coreDataManager.editTask(task: task) { status in
+            if status {
+                self.dismiss()
+            }
+        }
     }
 }
 

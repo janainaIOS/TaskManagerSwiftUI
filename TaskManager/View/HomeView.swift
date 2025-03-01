@@ -9,8 +9,8 @@ import SwiftUI
 
 struct HomeView: View {
     
+    @StateObject private var viewModel = TaskViewModel()
     @StateObject private var coreDataManager = CoreDataManager.shared
-    @State private var allTaskList: [Task] = [] //All saved tasks
     @State private var taskList: [Task] = [] //Filtered tasks
     @State private var addTaskTapped = false
     @State private var isLoading: Bool = true
@@ -18,16 +18,16 @@ struct HomeView: View {
     @State private var showAlertView = false
     @State private var alertMessage : String = ""
     @State private var selectedTask: Task?
-    @State private var selectedFilter: FilterOptions = .all
+    @State private var selectedFilter: FilterOptions = .none
     @State private var showFilterSheet: Bool = false
     @State private var viewForSort: Bool = true
     
     var body: some View {
         GeometryReader{ geometry in
             VStack() {
-                TopView(showSettingsView: $showSettingsView, allTaskList: $allTaskList)
+                TopView(showSettingsView: $showSettingsView, allTaskList: $viewModel.allTaskList)
                 
-                if !taskList.isEmpty {
+                if !viewModel.allTaskList.isEmpty {
                     FilterButtonView(viewForSort: $viewForSort, showFilterSheet: $showFilterSheet)
                 }
                 
@@ -46,13 +46,7 @@ struct HomeView: View {
                             EmptyTaskView()
                         } else {
                             TaskListView(size: geometry.size, taskList: $taskList, addTaskTapped: $addTaskTapped, selectedTask: $selectedTask, showAlertView: $showAlertView, alertMessage: $alertMessage)
-                                .onChange(of: selectedFilter) {
-                                    if viewForSort {
-                                        taskList = sortTasks()
-                                    } else {
-                                        taskList = filterTasks()
-                                    }
-                                }
+                               
                             // .transition(.scale.combined(with: .opacity)) // Fade-and-Scale Animation
                             // .animation(.spring, value: taskList)
                         }
@@ -60,6 +54,9 @@ struct HomeView: View {
                     }
                 }
             }
+        .onChange(of: selectedFilter) {
+            taskList = viewModel.filterTaskList(viewForSort: viewForSort, selectedFilter: selectedFilter)
+        }
             //Alerts
             .alert(isPresented: $showAlertView) {
                 Alert(
@@ -91,8 +88,8 @@ struct HomeView: View {
     }
     
     func refreshTaskList() {
-        allTaskList = coreDataManager.fetchTasks()
-        taskList = allTaskList
+        viewModel.allTaskList = coreDataManager.fetchTasks()
+        taskList = viewModel.allTaskList
         //isLoading = true
     }
     
@@ -104,8 +101,8 @@ struct HomeView: View {
                 coreDataManager.deleteTask(task: selectdTask) { status in
                     if status {
                         taskList.remove(at: index)
-                        if let indexFromAllTasks = allTaskList.firstIndex(where: { $0.id == selectdTask.id }) {
-                            allTaskList.remove(at: indexFromAllTasks)
+                        if let indexFromAllTasks = viewModel.allTaskList.firstIndex(where: { $0.id == selectdTask.id }) {
+                            viewModel.allTaskList.remove(at: indexFromAllTasks)
                         }
                     }
                 }
@@ -118,59 +115,6 @@ struct HomeView: View {
                     }
                 }
             }
-        }
-    }
-    
-    /*
-     func alertActions() {
-     if alertMessage.contains("delete") {
-     coreDataManager.deleteTask(task: selectedTask ?? Task(title: "", descriptn: "", date: "", priority: "low")) { status in
-     if status {
-     refreshTaskList()
-     }
-     }
-     } else {
-     selectedTask?.completed = true
-     //update task in coredata
-     coreDataManager.editTask(task: selectedTask ?? Task(title: "", descriptn: "", date: "", priority: "low")) { status in
-     if status {
-     refreshTaskList()
-     }
-     }
-     }
-     }
-     */
-    
-    
-    // Filter tasks
-    func filterTasks() -> [Task] {
-        taskList = allTaskList
-        switch selectedFilter {
-        case .completed:
-            return taskList.filter { $0.completed }
-        case .pending:
-            return taskList.filter { !$0.completed }
-        default:
-            return taskList
-        }
-    }
-    
-    // Sort tasks
-    func sortTasks() -> [Task] {
-        taskList = allTaskList
-        switch selectedFilter {
-        case .title:
-            return taskList.sorted { $0.title < $1.title }
-        case .dueDate:
-            return taskList.sorted { $0.date.formatToDate(inputFormat: .ddMMMyyyy) < $1.date.formatToDate(inputFormat: .ddMMMyyyy) }
-        case .priority:
-            let priorityOrder = ["high", "medium", "low"]
-            return taskList.sorted {
-                priorityOrder.firstIndex(of: $0.priority) ?? Int.max <
-                    priorityOrder.firstIndex(of: $1.priority) ?? Int.max
-            }
-        default:
-            return taskList
         }
     }
 }

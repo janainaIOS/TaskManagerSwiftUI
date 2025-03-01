@@ -2,9 +2,8 @@
 //  ColorManager.swift
 //  TaskManager
 //
-//  Created by Janaina A on 01/03/2025.
+//  Created by Janaina A on 28/02/2025.
 //
-
 
 import SwiftUI
 
@@ -15,4 +14,3 @@ class ColorManager {
         ThemeColor(rawValue: appThemeColor)?.color ?? .grape
     }
 }
-

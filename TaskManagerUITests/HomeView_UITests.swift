@@ -35,7 +35,7 @@ final class HomeView_UITests: XCTestCase {
         completedButton.tap()
         
         sleep(3)
-        let filteredTask = app.staticTexts["Test Task"]
+        let filteredTask = app.staticTexts["Fast"] // add a complted task name
         XCTAssertTrue(filteredTask.exists)
     }
     

@@ -57,6 +57,7 @@ enum ThemeColor: String, CaseIterable {
 }
 
 enum FilterOptions: String, CaseIterable {
+    case none
     case all       = "All"
     case completed = "Completed"
     case pending   = "Pending"
