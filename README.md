@@ -41,4 +41,4 @@ A task management iOS application built with SwiftUI  and Core Data to provide a
 
 3. Open the project:
  
-   WeatherIOS.xcodeproj
+   TaskManager.xcodeproj
