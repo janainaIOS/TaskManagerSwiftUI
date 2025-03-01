@@ -21,7 +21,6 @@ struct HomeView: View {
     @State private var selectedFilter: FilterOptions = .all
     @State private var showFilterSheet: Bool = false
     @State private var viewForSort: Bool = true
-    @AppStorage("appThemeColor") private var appThemeColor: String = ThemeColor.grape.rawValue
     
     var body: some View {
         GeometryReader{ geometry in
@@ -100,26 +99,25 @@ struct HomeView: View {
     func alertActions() {
         if var selectdTask = selectedTask,
            let index = taskList.firstIndex(where: { $0.id == selectdTask.id }) {
-        if alertMessage.contains("delete") {
-            
+            if alertMessage.contains("delete") {
+                
                 coreDataManager.deleteTask(task: selectdTask) { status in
                     if status {
-                         taskList.remove(at: index)
-                       // taskList = taskList
+                        taskList.remove(at: index)
                         if let indexFromAllTasks = allTaskList.firstIndex(where: { $0.id == selectdTask.id }) {
                             allTaskList.remove(at: indexFromAllTasks)
                         }
                     }
                 }
-        } else {
-            selectdTask.completed = true
-            //update task in coredata
-            coreDataManager.editTask(task: selectdTask) { status in
-                if status {
-                    isLoading = true
+            } else {
+                selectdTask.completed = true
+                //update task in coredata
+                coreDataManager.editTask(task: selectdTask) { status in
+                    if status {
+                        isLoading = true
+                    }
                 }
             }
-        }
         }
     }
     
@@ -318,6 +316,7 @@ struct HomeTileView: View {
                             Label(task.date, systemImage: "calendar")
                                 .font(.caption)
                                 .labelStyle(.titleAndIcon)
+                                .foregroundColor(.black)
                         }
                         Spacer()
                         VStack(alignment: .trailing, spacing: 5) {
@@ -349,22 +348,32 @@ struct HomeTileView: View {
     }
 }
 
-
 struct FloatingButtonView: View {
     @Binding var addTaskTapped: Bool
     @State private var animate = false
+    @State private var isAnimating = false // Track ongoing animation
     
     var body: some View {
+        let animationDuration = 0.5
+        
         Button(action: {
-            //single pulse animation
-            let animationDuration = 0.4
-            for delay in [0, animationDuration] {
-                withAnimation(.easeInOut(duration: animationDuration).delay(delay)) {
+            isAnimating = true
+            
+            // First pulse
+            withAnimation(.easeInOut(duration: animationDuration)) {
+                animate.toggle()
+            }
+            
+            // Second pulse
+            DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration) {
+                withAnimation(.easeInOut(duration: animationDuration)) {
                     animate.toggle()
-                    
                 }
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration) {
+            
+            // Animation ended
+            DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration * 2) {
+                isAnimating = false
                 addTaskTapped.toggle()
             }
         }) {
@@ -373,34 +382,15 @@ struct FloatingButtonView: View {
                 .foregroundColor(.accentColor)
                 .shadow(color: Color.black.opacity(0.3), radius: 4, x: 0, y: 0)
                 .scaleEffect(animate ? 1.3 : 1.0)
-                .animation(.easeOut(duration: 0.4), value: animate)
+                .animation(.easeOut(duration: animationDuration), value: animate)
         }
         .padding()
-        .zIndex(1) // Keeps button above the list
+        .zIndex(1)
+        .accessibilityIdentifier("AddTaskButton")
+        .accessibilityValue(isAnimating ? "Animating" : "Normal")
     }
 }
 
-/*
- 
- struct FloatingButtonView: View {
- @Binding var addTaskTapped: Bool
- 
- var body: some View {
- Button(action: {
- withAnimation {
- addTaskTapped.toggle()
- }
- }) {
- Image(systemName: "plus.circle.fill")
- .font(.system(size: 70))
- .foregroundColor(.accentColor)
- .shadow(color: Color.black.opacity(0.3), radius: 4, x: 0, y: 0)
- }
- .padding()
- .zIndex(1) // Keeps button above the list
- }
- }
- */
 struct EmptyTaskView: View {
     var body: some View {
         VStack {
@@ -435,6 +425,7 @@ struct FilterButtonView: View {
                     .font(.title2)
                     .foregroundColor(.primary)
             }
+            .accessibilityIdentifier("SortButton")
             Button(action: {
                 viewForSort = false
                 withAnimation {
@@ -445,6 +436,7 @@ struct FilterButtonView: View {
                     .font(.title2)
                     .foregroundColor(.primary)
             }
+            .accessibilityIdentifier("FilterButton")
         }
         .padding(.bottom, 15)
         .padding(.trailing, 20)

@@ -8,9 +8,8 @@
 import SwiftUI
 import SimpleToast
 
-struct AddTaskView: View { 
+struct AddTaskView: View {
     
-    @AppStorage("appThemeColor") private var appThemeColor: String = ThemeColor.grape.rawValue
     @StateObject private var coreDataManager = CoreDataManager.shared
     @Environment(\.dismiss) var dismiss
     @State var isForEdit = false
@@ -19,116 +18,75 @@ struct AddTaskView: View {
     @State private var selectedDate = Date()
     @State private var showToast = false
     @State private var toastMessage : String = ""
-    
     @Namespace private var animation
     
     var body: some View {
-        GeometryReader { geometry in
-            VStack {
-                Text(isForEdit ? "Edit Task" : "New Task")
-                    .font(.title3.bold())
-                    .frame(maxWidth: .infinity)
-                    .overlay(alignment: .leading) {
-                        Button {
-                            self.dismiss()
-                        } label: {
-                            Image(systemName: "arrow.left")
-                                .font(.title3)
-                                .foregroundColor(.primary)
-                        }
-                    }
-                    .padding(.bottom, 30)
-                
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("Title")
-                        .font(.footnote)
-                        .foregroundColor(.gray)
-                    
-                    TextField("", text: $task.title)
-                        .frame(maxWidth: .infinity)
-                        .padding(.top, 8)
-                }
-                Divider()
-                    .padding(.vertical, 10)
-                
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("Description")
-                        .font(.footnote)
-                        .foregroundColor(.gray)
-                    ZStack {
-                        Color(UIColor { $0.userInterfaceStyle == .dark ? .white : .gray }).opacity(0.05) // Background color
-                            .cornerRadius(8)
-                        TextEditor(text: $task.descriptn)
-                            .frame(height: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/)
-                            .scrollContentBackground(.hidden)
-                            .background(Color.clear)
-                            .padding(8)
-                    }
-                }
-                Divider()
-                    .padding(.vertical, 10)
-                
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("Due Date")
-                        .font(.footnote)
-                        .foregroundColor(.gray)
-                    
-                    Text(selectedDate.formatDate(outputFormat: .ddMMMyyyy))
-                        .font(.footnote)
-                        .fontWeight(.semibold)
-                        .padding(.top, 8)
-                        .padding(.leading, 28)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .overlay(alignment: .bottomLeading) {
-                    Button {
-                        hideKeyboard()
-                        showDatePicker.toggle()
-                    } label: {
-                        Image(systemName: "calendar")
-                            .foregroundColor(.primary)
-                    }
-                }
-                
-                Divider()
-                    .padding(.vertical, 10)
-                
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("Priority")
-                        .font(.footnote)
-                        .foregroundColor(.gray)
-                    
-                    prioritySelector
-                }
-                
-                Button(action: {
-                    addTaskAction()
-                }, label: {
-                    Text(isForEdit ? "Save" : "Add Task")
-                        .font(.subheadline)
-                        .frame(width: geometry.size.width * 0.85, height: 40)
-                        .foregroundColor(.white)
-                })
-                .tint(ColorManager.currentColor)
-                .buttonStyle(.borderedProminent)
-                .padding(.vertical, 33)
-                Spacer()
-            }
-            
+        
+        VStack {
+            headerView
+            InputTextView(title: "Title", value: $task.title)
+            InputTextView(title: "Description", value: $task.descriptn, isTextEditor: true)
+            DueDateView(selectedDate: $selectedDate, showDatePicker: $showDatePicker)
+            prorityView
+            saveButtonView
         }
         .showToast(isPresented: $showToast, message: toastMessage)
         .padding()
         .navigationBarBackButtonHidden()
         .overlay {
-           datePickerView()
+            datePickerView()
         }
         .onAppear {
             selectedDate = task.date.formatToDate(inputFormat: .ddMMMyyyy)
         }
     }
     
+    private var headerView: some View {
+        Text(isForEdit ? "Edit Task" : "New Task")
+            .font(.title3.bold())
+            .frame(maxWidth: .infinity)
+            .overlay(alignment: .leading) {
+                Button {
+                    self.dismiss()
+                } label: {
+                    Image(systemName: "arrow.left")
+                        .font(.title3)
+                        .foregroundColor(.primary)
+                }
+            }
+            .padding(.bottom, 30)
+    }
+    
+    private var prorityView: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Priority")
+                .font(.footnote)
+                .foregroundColor(.gray)
+            
+            prioritySelector
+        }
+    }
+    
+    private var saveButtonView: some View {
+        GeometryReader { geometry in
+            Button(action: {
+                addTaskAction()
+            }, label: {
+                Text(isForEdit ? "Save" : "Add Task")
+                    .font(.subheadline)
+                    .frame(width: geometry.size.width * 0.92, height: 40)
+                    .foregroundColor(.white)
+            })
+            .accessibilityIdentifier("SaveTaskButton")
+            .tint(ColorManager.currentColor)
+            .buttonStyle(.borderedProminent)
+            .padding(.vertical, 33)
+            Spacer()
+        }
+    }
+    
     // Priority selector view
-    var prioritySelector: some View {
+    private var prioritySelector: some View {
         HStack(spacing: 12) {
             ForEach(TaskPriority.allCases, id: \.self) { type in
                 let isSelected = task.priority == type.rawValue
@@ -141,6 +99,7 @@ struct AddTaskView: View {
                     .background(priorityBackground(isSelected, color: type.color))
                     .contentShape(Capsule())
                     .onTapGesture {
+                        hideKeyboard()
                         withAnimation {
                             task.priority = type.rawValue
                         }
@@ -150,12 +109,12 @@ struct AddTaskView: View {
     }
     
     // Priority background view
-    func priorityBackground(_ isSelected: Bool, color: Color) -> some View {
+    private func priorityBackground(_ isSelected: Bool, color: Color) -> some View {
         Group {
             if isSelected {
                 Capsule()
                     .fill(color)
-                    .strokeBorder(.black)
+                    .strokeBorder(.primary)
                     .matchedGeometryEffect(id: "TYPE", in: animation)
             } else {
                 Capsule()
@@ -236,7 +195,67 @@ struct AddTaskView: View {
             }
         }
     }
+}
+
+struct InputTextView: View {
+    var title: String
+    @Binding var value: String
+    var isTextEditor: Bool = false
     
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(title)
+                .font(.footnote)
+                .foregroundColor(.gray)
+            if isTextEditor {
+                ZStack {
+                    Color(UIColor { $0.userInterfaceStyle == .dark ? .white : .gray }).opacity(0.05)
+                        .cornerRadius(8)
+                    TextEditor(text: $value)
+                        .frame(height: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/)
+                        .scrollContentBackground(.hidden)
+                        .background(Color.clear)
+                        .padding(8)
+                }
+            } else {
+                TextField("", text: $value)
+                    .padding(.top, 8)
+            }
+        }
+        Divider().padding(.vertical, 10)
+    }
+}
+
+struct DueDateView: View {
+    @Binding var selectedDate: Date
+    @Binding var showDatePicker: Bool
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Due Date")
+                .font(.footnote)
+                .foregroundColor(.gray)
+            
+            Text(selectedDate.formatDate(outputFormat: .ddMMMyyyy))
+                .font(.footnote)
+                .fontWeight(.semibold)
+                .padding(.top, 8)
+                .padding(.leading, 28)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .overlay(alignment: .bottomLeading) {
+            Button {
+                hideKeyboard()
+                showDatePicker.toggle()
+            } label: {
+                Image(systemName: "calendar")
+                    .foregroundColor(.primary)
+            }
+            .accessibilityIdentifier("calendarButton")
+        }
+        
+        Divider() .padding(.vertical, 10)
+    }
 }
 
 #Preview {

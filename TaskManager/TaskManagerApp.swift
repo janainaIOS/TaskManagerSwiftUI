@@ -18,9 +18,9 @@ struct TaskManagerApp: App {
                 HomeView()
                     .environment(\.managedObjectContext, persistenceController.container.viewContext)
             }
-                // Set app theme color
-                .accentColor(ThemeColor(rawValue: appThemeColor)?.color ?? .grape)
-                .tint(ThemeColor(rawValue: appThemeColor)?.color ?? .grape)
+            // Set app theme color
+            .accentColor(ThemeColor(rawValue: appThemeColor)?.color ?? .grape)
+            .tint(ThemeColor(rawValue: appThemeColor)?.color ?? .grape)
         }
     }
 }

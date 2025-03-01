@@ -14,11 +14,13 @@ struct SideMenu: View {
     var body: some View {
         ZStack(alignment: .top) {
             if (isShowing) {
-                Color.white
-                    .ignoresSafeArea()
-                    .onTapGesture {
-                        isShowing.toggle()
-                    }
+                Color(uiColor: UIColor { traitCollection in
+                    return traitCollection.userInterfaceStyle == .dark ? UIColor.systemGray6 : UIColor.white
+                })
+                .ignoresSafeArea()
+                .onTapGesture {
+                    isShowing.toggle()
+                }
                 content
                     .transition(edgeTransition)
                     .background(
@@ -66,7 +68,9 @@ struct SettingsView: View {
             }
             .padding()
         }
-        .background(.white)
+        .background(Color(uiColor: UIColor { traitCollection in
+            return traitCollection.userInterfaceStyle == .dark ? UIColor.systemGray6 : UIColor.white
+        }))
         .frame(maxWidth: 250, maxHeight: .infinity, alignment: .top)
     }
 }
